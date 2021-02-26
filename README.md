@@ -6,7 +6,7 @@
 
 
 ## :scroll: Description
-An app to a search something that will change your life forever.
+An app to search something that will change your life forever.
 
 Try me and discover how much you will love those puppies
 
