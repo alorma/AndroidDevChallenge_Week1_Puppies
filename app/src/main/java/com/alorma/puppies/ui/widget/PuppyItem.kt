@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -93,29 +94,27 @@ private fun PuppyItemCard(
                 bottom = 8.dp
             )
         ) {
-            Column {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = puppy.name,
-                    style = MaterialTheme.typography.h5,
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .fillMaxWidth(),
-                    text = "Breed:",
-                    style = MaterialTheme.typography.body1,
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .fillMaxWidth(),
-                    text = "Age:",
-                    style = MaterialTheme.typography.body1,
-                )
-            }
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = puppy.name,
+                fontWeight = FontWeight.Bold,
+            )
+            PuppyItemCardRowInfo("Breed: ${puppy.breed.name}")
+            PuppyItemCardRowInfo("Age: ${puppy.age}")
         }
     }
+}
+
+@Composable
+fun PuppyItemCardRowInfo(text: String) {
+    Text(
+        modifier = Modifier
+            .padding(start = 4.dp)
+            .fillMaxWidth(),
+        text = text,
+        fontWeight = FontWeight.Light,
+        style = MaterialTheme.typography.body2,
+    )
 }
 
 @Preview(showBackground = true)

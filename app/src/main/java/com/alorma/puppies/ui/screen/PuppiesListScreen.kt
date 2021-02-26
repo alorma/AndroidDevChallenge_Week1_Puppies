@@ -18,14 +18,11 @@ package com.alorma.puppies.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
@@ -50,15 +47,15 @@ import androidx.navigation.compose.navigate
 import androidx.navigation.compose.rememberNavController
 import com.alorma.puppies.Navigation
 import com.alorma.puppies.data.PuppyProvider
+import com.alorma.puppies.ui.base.widget.ChipGroup
 import com.alorma.puppies.ui.model.BreedItemModel
 import com.alorma.puppies.ui.model.GenderType
 import com.alorma.puppies.ui.model.PuppyItemModel
-import com.alorma.puppies.ui.widget.FilterChip
 import com.alorma.puppies.ui.widget.PuppyItem
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.RangeSlider
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
-import java.util.Locale
+import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -99,7 +96,8 @@ fun PuppiesListScreen(
         )
         PuppiesList(
             puppies = puppiesList,
-            navController = navController
+            navController = navController,
+            selectedBreedFilters = selectedBreedFilters,
         )
     }
 }
@@ -129,14 +127,14 @@ private fun PuppiesFilters(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         Text(text = "Breed", style = MaterialTheme.typography.subtitle1)
-        ChipFilters(
+        ChipGroup(
             items = breeds,
             selectedItems = selectedBreedFilters.value,
             itemFormatter = { breed -> breed.name }
         ) { selectedBreeds -> selectedBreedFilters.value = selectedBreeds }
 
         Text(text = "Gender", style = MaterialTheme.typography.subtitle1)
-        ChipFilters(
+        ChipGroup(
             items = genders,
             selectedItems = selectedGenderFilters.value,
             itemFormatter = { gender -> gender.name.capitalize(Locale.getDefault()) }
@@ -188,54 +186,36 @@ private fun Ranger(
 }
 
 @Composable
-private fun <T> ChipFilters(
-    items: List<T>,
-    selectedItems: List<T>,
-    itemFormatter: (T) -> String,
-    onBreedSelectionChanged: (List<T>) -> Unit
-) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
-    ) {
-        itemsIndexed(items) { index, item ->
-            FilterChip(
-                text = itemFormatter(item),
-                selected = selectedItems.contains(item),
-            ) { selected ->
-                if (selected) {
-                    onBreedSelectionChanged(selectedItems + item)
-                } else {
-                    onBreedSelectionChanged(selectedItems - item)
-                }
-            }
-
-            if (index < items.size - 1) {
-                Spacer(Modifier.width(8.dp))
-            }
-        }
-    }
-}
-
-@Composable
 private fun PuppiesList(
     puppies: List<PuppyItemModel>,
-    navController: NavController
+    navController: NavController,
+    selectedBreedFilters: MutableState<List<BreedItemModel>>,
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 8.dp)
-    ) {
-        itemsIndexed(puppies) { index, puppy ->
-            key(puppy.id.value) {
-                PuppyItem(
-                    puppy = puppy,
-                    onClick = {
-                        navController.navigate(Navigation.buildPuppyDetailPath(puppyId = puppy.id))
+    Column {
+        ChipGroup(
+            items = PuppyProvider.getAllBreeds(),
+            selectedItems = selectedBreedFilters.value,
+            itemFormatter = { it.name },
+            onBreedSelectionChanged = { selectedBreeds ->
+                selectedBreedFilters.value = selectedBreeds
+            })
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 8.dp)
+        ) {
+            itemsIndexed(puppies) { index, puppy ->
+                key(puppy.id.value) {
+                    PuppyItem(
+                        puppy = puppy,
+                        onClick = {
+                            navController.navigate(Navigation.buildPuppyDetailPath(puppyId = puppy.id))
+                        }
+                    )
+                    if (index < puppies.size) {
+                        Spacer(modifier = Modifier.requiredHeight(8.dp))
                     }
-                )
-                if (index < puppies.size) {
-                    Spacer(modifier = Modifier.requiredHeight(8.dp))
                 }
             }
         }
