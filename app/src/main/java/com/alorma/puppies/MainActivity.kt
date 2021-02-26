@@ -31,7 +31,6 @@ import com.alorma.puppies.ui.screen.PuppiesListScreen
 import com.alorma.puppies.ui.screen.PuppyDetailScreen
 import com.alorma.puppies.ui.theme.DarkColorPalette
 import com.alorma.puppies.ui.theme.PuppiesTheme
-import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun mainContent(darkModeState: MutableState<Boolean>) {
     DebugDrawerLayout(
-        isDebug = { BuildConfig.DEBUG },
+        isDebug = { true },
         drawerColors = DarkColorPalette,
         debugDrawerState = rememberDebugDrawerState(DebugDrawerValue.Closed),
         drawerModules = {
