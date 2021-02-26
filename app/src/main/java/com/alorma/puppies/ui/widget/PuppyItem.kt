@@ -41,6 +41,8 @@ fun PuppyItem(
     puppy: PuppyItemModel,
     onClick: () -> Unit,
 ) {
+    val avatarHeight = 180.dp
+    val avatarWidth = 120.dp
     Box(
         modifier = Modifier.padding(
             start = 8.dp,
@@ -48,13 +50,12 @@ fun PuppyItem(
             end = 8.dp
         )
     ) {
-        // PuppyItemCard(avatarSize, puppy, onClick = onClick)
+        PuppyItemCard(avatarHeight, avatarWidth, puppy, onClick = onClick)
         PuppyAvatar(
             modifier = Modifier
-                .height(180.dp)
-                .width(120.dp)
-                .clip(shape = MaterialTheme.shapes.medium)
-                .shadow(elevation = 4.dp, shape = MaterialTheme.shapes.medium),
+                .height(avatarHeight)
+                .width(avatarWidth)
+                .clip(shape = MaterialTheme.shapes.medium),
             puppy = puppy
         )
     }
@@ -62,18 +63,21 @@ fun PuppyItem(
 
 @Composable
 private fun PuppyItemCard(
-    avatarSize: Dp,
+    avatarHeight: Dp,
+    avatarWidth: Dp,
     puppy: PuppyItemModel,
     onClick: () -> Unit,
 ) {
+    val verticalDistanceFromAvatar = 16.dp
     Card(
         modifier = Modifier
             .padding(
-                top = avatarSize / 2,
-                start = avatarSize / 2,
+                top = verticalDistanceFromAvatar,
+                start = avatarWidth / 2,
                 end = 8.dp,
-                bottom = 8.dp,
+                bottom = verticalDistanceFromAvatar,
             )
+            .height(avatarHeight - verticalDistanceFromAvatar * 2)
             .fillMaxWidth()
             .primaryClick { onClick() },
         shape = MaterialTheme.shapes.medium,
@@ -82,29 +86,27 @@ private fun PuppyItemCard(
         Column(
             modifier = Modifier.padding(
                 top = 2.dp,
-                start = 0.dp,
+                start = avatarWidth / 2 + 8.dp,
                 end = 8.dp,
                 bottom = 8.dp
             )
         ) {
             Column {
                 Text(
-                    modifier = Modifier
-                        .padding(start = avatarSize / 2)
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     text = puppy.name,
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.h5,
                 )
                 Text(
                     modifier = Modifier
-                        .padding(start = (avatarSize / 2) - 8.dp)
+                        .padding(start = 16.dp)
                         .fillMaxWidth(),
                     text = "Breed:",
                     style = MaterialTheme.typography.body1,
                 )
                 Text(
                     modifier = Modifier
-                        .padding(start = (avatarSize / 2) - 8.dp)
+                        .padding(start = 16.dp)
                         .fillMaxWidth(),
                     text = "Age:",
                     style = MaterialTheme.typography.body1,

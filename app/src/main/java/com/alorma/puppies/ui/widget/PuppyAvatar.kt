@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
@@ -48,9 +49,12 @@ fun PuppyAvatar(
     key(puppy.image) {
         val color = MaterialTheme.colors.onSurface.copy(alpha = 0.20f)
         val compositeColor = color.compositeOver(MaterialTheme.colors.surface)
-        val avatarModifier = modifier.background(compositeColor)
 
-        Box(modifier = avatarModifier) {
+        Card(
+            modifier = modifier,
+            elevation = 8.dp,
+            backgroundColor = compositeColor,
+        ) {
             if (puppy.image == null) {
                 PuppyEmptyIcon(contentDescription = "${puppy.name} picture empty")
             } else {
