@@ -87,18 +87,22 @@ private fun PuppyItemCard(
         Box(
             modifier = Modifier.primaryClick(onClick = onClick)
         ) {
-            Icon(
-                painter = painterResource(id = puppy.icon),
-                contentDescription = null,
+            Box(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .size(24.dp)
                     .padding(
                         top = 8.dp,
-                        end = 12.dp
-                    ),
-                tint = MaterialTheme.colors.onBackground.copy(alpha = 0.40f)
-            )
+                        end = 12.dp,
+                    )
+            ) {
+                Icon(
+                    painter = painterResource(id = puppy.icon),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(24.dp),
+                    tint = MaterialTheme.colors.onBackground.copy(alpha = 0.40f)
+                )
+            }
             Box(
                 modifier = Modifier.padding(
                     top = 8.dp,

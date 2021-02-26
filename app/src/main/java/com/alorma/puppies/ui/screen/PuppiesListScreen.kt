@@ -15,6 +15,7 @@
  */
 package com.alorma.puppies.ui.screen
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,6 +42,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.key
@@ -51,9 +53,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
+import androidx.navigation.compose.rememberNavController
 import com.alorma.puppies.Navigation
 import com.alorma.puppies.R
 import com.alorma.puppies.data.PuppyProvider
@@ -62,6 +66,7 @@ import com.alorma.puppies.ui.base.modifier.onSurfaceClick
 import com.alorma.puppies.ui.base.modifier.primaryClick
 import com.alorma.puppies.ui.base.widget.ChipGroup
 import com.alorma.puppies.ui.model.AnimalType
+import com.alorma.puppies.ui.theme.PuppiesTheme
 import com.alorma.puppies.ui.widget.PuppyItem
 import com.alorma.puppies.ui.widget.UserAvatar
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
@@ -83,7 +88,7 @@ fun PuppiesListScreen(
             PuppiesListPremiumBanner()
             Spacer(modifier = Modifier.height(12.dp))
             PuppiesListSearchBar()
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.requiredHeight(16.dp))
             PuppiesListFilters()
             Spacer(modifier = Modifier.height(12.dp))
         }
@@ -96,14 +101,26 @@ fun PuppiesListTopBar() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .requiredHeight(56.dp)
+            .padding(8.dp),
+        contentAlignment = Alignment.CenterStart,
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .border(
+                    border = BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colors.onBackground.copy(alpha = 0.40f)
+                    ),
+                    shape = CircleShape,
+                )
+                .clip(CircleShape)
+                .onSurfaceClick { }
+                .padding(4.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(24.dp),
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = null,
                 tint = MaterialTheme.colors.onBackground,
@@ -113,6 +130,13 @@ fun PuppiesListTopBar() {
                 text = "Barcelona",
                 color = MaterialTheme.colors.onBackground,
                 style = MaterialTheme.typography.subtitle1,
+            )
+            Spacer(modifier = Modifier.width(2.dp))
+            Icon(
+                modifier = Modifier.size(20.dp),
+                imageVector = Icons.Outlined.ArrowDropDown,
+                contentDescription = null,
+                tint = MaterialTheme.colors.onBackground,
             )
         }
         UserAvatar(
@@ -196,7 +220,10 @@ fun PuppiesListSearchBar() {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .primaryClick { }
-                .padding(horizontal = 8.dp, vertical = 2.dp),
+                .padding(
+                    horizontal = 16.dp,
+                    vertical = 2.dp
+                ),
         ) {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -258,5 +285,13 @@ fun PuppiesList(navController: NavController) {
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun preview() {
+    PuppiesTheme {
+        PuppiesListScreen(navController = rememberNavController())
     }
 }

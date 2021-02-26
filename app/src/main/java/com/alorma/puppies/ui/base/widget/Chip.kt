@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -66,6 +67,7 @@ fun Chip(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
+
             if (icon != null) {
                 Icon(
                     painter = painterResource(id = icon),
@@ -79,6 +81,9 @@ fun Chip(
                 style = MaterialTheme.typography.body2,
                 color = textColor
             )
+            if (icon != null) {
+                Spacer(modifier = Modifier.requiredWidth(4.dp))
+            }
         }
     }
 }

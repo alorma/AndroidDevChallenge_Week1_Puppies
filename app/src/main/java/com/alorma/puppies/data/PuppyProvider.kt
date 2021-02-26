@@ -60,6 +60,42 @@ object PuppyProvider {
             age = 2,
             icon = R.drawable.ic_dog,
         ),
+        PuppyItemModel(
+            id = PuppyId(2),
+            name = "Menta",
+            image = "https://random.dog/f0ba87f4-d2f3-4430-8727-6b2f6a49dfe7.jpg",
+            gender = GenderType.MALE,
+            breed = breedsList[0],
+            age = 2,
+            icon = R.drawable.ic_dog,
+        ),
+        PuppyItemModel(
+            id = PuppyId(2),
+            name = "Menta",
+            image = "https://random.dog/f0ba87f4-d2f3-4430-8727-6b2f6a49dfe7.jpg",
+            gender = GenderType.MALE,
+            breed = breedsList[0],
+            age = 2,
+            icon = R.drawable.ic_dog,
+        ),
+        PuppyItemModel(
+            id = PuppyId(2),
+            name = "Menta",
+            image = "https://random.dog/f0ba87f4-d2f3-4430-8727-6b2f6a49dfe7.jpg",
+            gender = GenderType.MALE,
+            breed = breedsList[0],
+            age = 2,
+            icon = R.drawable.ic_dog,
+        ),
+        PuppyItemModel(
+            id = PuppyId(2),
+            name = "Menta",
+            image = "https://random.dog/f0ba87f4-d2f3-4430-8727-6b2f6a49dfe7.jpg",
+            gender = GenderType.MALE,
+            breed = breedsList[0],
+            age = 2,
+            icon = R.drawable.ic_dog,
+        ),
     )
 
     private val animalTypes = listOf(
