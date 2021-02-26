@@ -32,8 +32,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,14 +50,16 @@ fun PuppyItem(
 ) {
     val avatarHeight = 140.dp
     val avatarWidth = 140.dp
-    Box {
+    Box(
+        modifier = Modifier.padding(horizontal = 8.dp),
+    ) {
         PuppyItemCard(avatarHeight, avatarWidth, puppy, onClick = onClick)
         PuppyAvatar(
             modifier = Modifier
                 .height(avatarHeight)
-                .width(avatarWidth)
-                .clip(shape = MaterialTheme.shapes.medium),
-            puppy = puppy
+                .width(avatarWidth),
+            puppy = puppy,
+            shape = MaterialTheme.shapes.medium,
         )
     }
 }
@@ -80,14 +80,13 @@ private fun PuppyItemCard(
                 bottom = verticalDistanceFromAvatar,
             )
             .height(avatarHeight - verticalDistanceFromAvatar * 2)
-            .fillMaxWidth()
-            .primaryClick { onClick() }
-            .clip(MaterialTheme.shapes.medium)
-            .clipToBounds(),
+            .fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         elevation = 8.dp,
     ) {
-        Box {
+        Box(
+            modifier = Modifier.primaryClick(onClick = onClick)
+        ) {
             Icon(
                 painter = painterResource(id = puppy.icon),
                 contentDescription = null,

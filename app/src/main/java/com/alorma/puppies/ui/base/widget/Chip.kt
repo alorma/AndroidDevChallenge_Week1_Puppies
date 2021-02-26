@@ -20,20 +20,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.selection.selectable
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alorma.puppies.R
+import com.alorma.puppies.ui.base.modifier.primaryClick
 import com.alorma.puppies.ui.theme.PuppiesTheme
 
 @Composable
@@ -44,35 +43,35 @@ fun Chip(
     onSelectedChanged: (Boolean) -> Unit
 ) {
     val color = if (selected) {
-        MaterialTheme.colors.secondary
+        MaterialTheme.colors.primary
     } else {
         MaterialTheme.colors.onBackground.copy(alpha = 0.20f)
+            .compositeOver(MaterialTheme.colors.background)
     }
 
     val textColor = if (selected) {
-        MaterialTheme.colors.onSecondary
+        MaterialTheme.colors.onPrimary
     } else {
         MaterialTheme.colors.onBackground
     }
 
-    Surface(
-        color = color,
+    Card(
+        backgroundColor = color,
         shape = MaterialTheme.shapes.small,
-        modifier = Modifier
-            .clip(MaterialTheme.shapes.small)
-            .selectable(
-                selected = selected,
-                role = Role.Checkbox,
-                onClick = { onSelectedChanged(!selected) }
-            ),
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+            modifier = Modifier
+                .primaryClick(onClick = { onSelectedChanged(!selected) })
+                .padding(horizontal = 8.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
             if (icon != null) {
-                Icon(painter = painterResource(id = icon), contentDescription = null)
+                Icon(
+                    painter = painterResource(id = icon),
+                    contentDescription = null,
+                    tint = textColor,
+                )
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Text(

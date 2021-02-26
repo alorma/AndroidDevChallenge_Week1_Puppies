@@ -32,8 +32,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.alorma.puppies.ui.model.PuppyItemModel
 import com.alorma.puppies.ui.theme.PuppiesTheme
@@ -43,12 +47,16 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 fun PuppyAvatar(
     modifier: Modifier = Modifier,
     puppy: PuppyItemModel,
+    backgroundColor: Color = MaterialTheme.colors.background,
+    shape: Shape = RectangleShape,
+    elevation: Dp = 8.dp
 ) {
     key(puppy.image) {
         Card(
             modifier = modifier,
-            backgroundColor = MaterialTheme.colors.background,
-            elevation = 12.dp,
+            backgroundColor = backgroundColor,
+            shape = shape,
+            elevation = elevation,
         ) {
             if (puppy.image == null) {
                 PuppyEmptyIcon(contentDescription = "${puppy.name} picture empty")
@@ -73,7 +81,7 @@ fun PuppyAvatar(
 @Composable
 fun PuppyEmptyIcon(contentDescription: String) {
     Box(modifier = Modifier.fillMaxSize()) {
-        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.secondary) {
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.primary) {
             PuppyPlaceholderIcon(contentDescription = contentDescription)
         }
     }

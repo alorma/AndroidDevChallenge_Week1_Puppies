@@ -38,13 +38,6 @@ fun Modifier.primaryClick(
     coloredClick(color = MaterialTheme.colors.primary, alpha = alpha, onClick = onClick)
 }
 
-fun Modifier.secondaryClick(
-    alpha: Float = 0.20f,
-    onClick: () -> Unit
-) = composed {
-    coloredClick(color = MaterialTheme.colors.secondary, alpha = alpha, onClick = onClick)
-}
-
 fun Modifier.errorClick(
     alpha: Float = 0.20f,
     onClick: () -> Unit

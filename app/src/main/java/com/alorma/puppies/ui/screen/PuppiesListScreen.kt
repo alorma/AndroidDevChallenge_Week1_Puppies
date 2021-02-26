@@ -59,6 +59,7 @@ import com.alorma.puppies.R
 import com.alorma.puppies.data.PuppyProvider
 import com.alorma.puppies.data.UserProvider
 import com.alorma.puppies.ui.base.modifier.onSurfaceClick
+import com.alorma.puppies.ui.base.modifier.primaryClick
 import com.alorma.puppies.ui.base.widget.ChipGroup
 import com.alorma.puppies.ui.model.AnimalType
 import com.alorma.puppies.ui.widget.PuppyItem
@@ -85,8 +86,8 @@ fun PuppiesListScreen(
             Spacer(modifier = Modifier.height(16.dp))
             PuppiesListFilters()
             Spacer(modifier = Modifier.height(12.dp))
-            PuppiesList(navController = navController)
         }
+        PuppiesList(navController = navController)
     }
 }
 
@@ -97,31 +98,22 @@ fun PuppiesListTopBar() {
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                modifier = Modifier.padding(start = 4.dp),
-                text = "Location",
-                color = MaterialTheme.colors.onBackground.copy(alpha = 0.50f),
-                style = MaterialTheme.typography.caption
+            Icon(
+                modifier = Modifier.size(20.dp),
+                imageVector = Icons.Default.LocationOn,
+                contentDescription = null,
+                tint = MaterialTheme.colors.onBackground,
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.size(20.dp),
-                    imageVector = Icons.Default.LocationOn,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.onBackground,
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "Barcelona",
-                    color = MaterialTheme.colors.onBackground,
-                    style = MaterialTheme.typography.subtitle1,
-                )
-            }
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = "Barcelona",
+                color = MaterialTheme.colors.onBackground,
+                style = MaterialTheme.typography.subtitle1,
+            )
         }
         UserAvatar(
             modifier = Modifier
@@ -130,7 +122,7 @@ fun PuppiesListTopBar() {
                 .clip(CircleShape)
                 .border(
                     width = 2.dp,
-                    color = MaterialTheme.colors.secondary,
+                    color = MaterialTheme.colors.primary,
                     shape = CircleShape
                 )
                 .onSurfaceClick { },
@@ -161,7 +153,7 @@ fun PuppiesListPremiumBanner() {
                 Text(
                     text = "Become premium with us",
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.secondary,
+                    color = MaterialTheme.colors.primary,
                     style = MaterialTheme.typography.subtitle1,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -174,7 +166,7 @@ fun PuppiesListPremiumBanner() {
                 Button(
                     onClick = { },
                     colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.secondary
+                        backgroundColor = MaterialTheme.colors.primary
                     )
                 ) {
                     Text(text = "Become Premium")
@@ -194,30 +186,30 @@ fun PuppiesListPremiumBanner() {
 
 @Composable
 fun PuppiesListSearchBar() {
-    Box {
-        Card(
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        elevation = 8.dp,
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            elevation = 8.dp,
+                .primaryClick { }
+                .padding(horizontal = 8.dp, vertical = 2.dp),
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.onSurface.copy(alpha = 0.50f),
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Search pet to adopt",
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.40f),
-                    style = MaterialTheme.typography.subtitle1,
-                )
-            }
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = null,
+                tint = MaterialTheme.colors.onSurface.copy(alpha = 0.50f),
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Search pet to adopt",
+                color = MaterialTheme.colors.onSurface.copy(alpha = 0.40f),
+                style = MaterialTheme.typography.subtitle1,
+            )
         }
     }
 }

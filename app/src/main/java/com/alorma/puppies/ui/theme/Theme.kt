@@ -25,9 +25,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
 val LightColorPalette = lightColors(
-    primary = canary,
+    primary = soda,
     primaryVariant = canary_d_1,
-    onPrimary = black,
+    onPrimary = white,
     secondary = soda,
     onSecondary = white,
     background = gray_l_4,
@@ -36,7 +36,7 @@ val LightColorPalette = lightColors(
 )
 
 val DarkColorPalette = darkColors(
-    primary = canary_l_3,
+    primary = soda_l_3,
     primaryVariant = canary,
     onPrimary = black,
     secondary = soda_l_3,

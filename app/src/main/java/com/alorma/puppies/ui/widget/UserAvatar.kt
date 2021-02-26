@@ -73,7 +73,7 @@ fun UserAvatar(
 @Composable
 fun UserEmptyIcon(contentDescription: String) {
     Box(modifier = Modifier.fillMaxSize()) {
-        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.secondary) {
+        CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.primary) {
             UserPlaceholderIcon(contentDescription = contentDescription)
         }
     }
