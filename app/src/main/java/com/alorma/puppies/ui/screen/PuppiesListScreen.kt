@@ -136,7 +136,6 @@ fun PuppiesListTopBar() {
                 .onSurfaceClick { },
             user = UserProvider.user,
         )
-
     }
 }
 
@@ -241,7 +240,8 @@ fun PuppiesListFilters() {
         itemIconFormatter = { it.icon },
         onBreedSelectionChanged = { selectedBreeds ->
             selectedBreedFilters.value = selectedBreeds
-        })
+        }
+    )
 }
 
 @Composable
