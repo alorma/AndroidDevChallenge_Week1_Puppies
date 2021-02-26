@@ -18,35 +18,45 @@ package com.alorma.puppies.ui.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.alorma.drawer_base.compositeOverSurface
 import com.alorma.puppies.data.PuppyProvider
 import com.alorma.puppies.ui.base.modifier.primaryClick
+import com.alorma.puppies.ui.base.widget.ChipGroup
 import com.alorma.puppies.ui.model.PuppyId
 import com.alorma.puppies.ui.model.PuppyItemModel
 import dev.chrisbanes.accompanist.coil.CoilImage
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
+import java.util.Locale
 
 @Composable
 fun PuppyDetailScreen(
@@ -58,22 +68,21 @@ fun PuppyDetailScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         Box {
-            val shape = MaterialTheme.shapes.medium.copy(
-                topStart = CornerSize(0.dp),
-                topEnd = CornerSize(0.dp),
-            )
             PuppyHeader(
                 modifier = Modifier
                     .align(alignment = Alignment.TopCenter)
-                    .requiredHeight(200.dp)
-                    .clip(shape)
+                    .requiredHeight(280.dp)
                     .clipToBounds(),
                 puppy = puppy,
                 navController = navController
             )
-            Column {
+            Column(
+                modifier = Modifier.padding(
+                    top = 220.dp
+                ),
+            ) {
                 PuppyDetailCard(puppy)
-                PuppyContent(puppy)
+                PuppyContent()
             }
         }
     }
@@ -119,36 +128,109 @@ fun PuppyDetailCard(puppy: PuppyItemModel) {
     Card(
         modifier = Modifier
             .padding(
-                top = 150.dp,
-                start = 24.dp,
-                end = 24.dp
+                horizontal = 16.dp
             )
             .requiredHeight(100.dp)
             .fillMaxWidth(),
-        backgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.12f).compositeOverSurface(),
-        contentColor = MaterialTheme.colors.onPrimary,
+        elevation = 8.dp,
     ) {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            text = puppy.name,
-            style = MaterialTheme.typography.h4,
-        )
+        Box(
+            modifier = Modifier.padding(
+                horizontal = 16.dp,
+                vertical = 8.dp,
+            )
+        ) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = puppy.name,
+                    fontWeight = FontWeight.Bold,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = puppy.breed.name,
+                    style = MaterialTheme.typography.caption,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.40f)
+                )
+            }
+
+            Row(
+                modifier = Modifier.align(Alignment.BottomStart),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "${puppy.age} years",
+                    style = MaterialTheme.typography.caption,
+                )
+                Text(
+                    text = " · ",
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = puppy.gender.name.capitalize(Locale.getDefault()),
+                    style = MaterialTheme.typography.caption,
+                )
+            }
+        }
     }
 }
 
 @Composable
-fun PuppyContent(puppy: PuppyItemModel) {
-    Column(
-        modifier = Modifier.padding(8.dp)
+fun PuppyContent() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
     ) {
-        Text(text = LIPSUM, style = MaterialTheme.typography.body2)
+        Column {
+            ChipGroup(
+                items = listOf(
+                    "Active",
+                    "Friendly",
+                    "Loyal"
+                ),
+                selectedItems = remember { mutableStateListOf() },
+                itemFormatter = { it },
+                onSelectionChanged = { }
+            )
+
+            Text(text = LIPSUM, style = MaterialTheme.typography.body2)
+        }
+
+        val favState = remember { mutableStateOf(false) }
+        Row(
+            modifier = Modifier.align(Alignment.BottomEnd),
+        ) {
+            IconButton(
+                modifier = Modifier.size(48.dp),
+                onClick = { favState.value = !favState.value },
+            ) {
+                Icon(
+                    imageVector = if (favState.value) {
+                        Icons.Default.Favorite
+                    } else {
+                        Icons.Default.FavoriteBorder
+                    },
+                    contentDescription = "Favorite",
+                    tint = if (favState.value) {
+                        MaterialTheme.colors.primary
+                    } else {
+                        MaterialTheme.colors.onBackground
+                    },
+                )
+            }
+            Button(
+                modifier = Modifier
+                    .requiredHeight(48.dp)
+                    .fillMaxWidth(),
+                onClick = { }
+            ) {
+                Text("Adopt Now")
+            }
+        }
     }
 }
 
 private const val LIPSUM = """
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum congue tempus purus. Ut sed purus eu diam dictum dictum. Cras ut accumsan urna. Ut vulputate eget neque ut porta. Donec in dignissim urna. Mauris pellentesque mollis tristique. Morbi dapibus venenatis facilisis. Morbi ligula nisi, laoreet non ullamcorper sit amet, laoreet vel dui. Vestibulum blandit est a lectus luctus placerat. Ut sollicitudin elit at quam consequat fringilla.
-
-Duis mollis dolor eu nibh viverra, in pulvinar libero laoreet. Etiam in convallis ante, a sodales massa. Maecenas imperdiet neque id nisl luctus commodo. Cras commodo quam ante, quis euismod orci tincidunt elementum. Nunc lacus justo, ultricies et efficitur luctus, condimentum et odio. Duis auctor, velit id convallis ornare, purus magna placerat orci, vitae fringilla dui sapien eget mauris. Fusce sodales, nibh vel malesuada interdum, lacus risus sagittis felis, vel interdum urna felis at mauris. Aenean dignissim libero magna, a porttitor ex ullamcorper eget. Integer sed lobortis erat. Vestibulum pulvinar ipsum ac dolor consequat, vitae imperdiet leo dignissim. Praesent sodales vulputate dictum. Sed ultricies tellus arcu, nec tempus tellus volutpat eget. Donec vulputate placerat lacus, sit amet pharetra urna tempor sed. Praesent risus ex, aliquam id mi at, egestas mollis odio. Integer condimentum imperdiet tortor quis dapibus. Aenean et lorem non tellus mollis pulvinar sed eget lacus.
 """

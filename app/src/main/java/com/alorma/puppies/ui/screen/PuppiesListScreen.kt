@@ -257,7 +257,7 @@ fun PuppiesListFilters() {
         selectedItems = selectedBreedFilters.value,
         itemFormatter = { it.name },
         itemIconFormatter = { it.icon },
-        onBreedSelectionChanged = { selectedBreeds ->
+        onSelectionChanged = { selectedBreeds ->
             selectedBreedFilters.value = selectedBreeds
         }
     )

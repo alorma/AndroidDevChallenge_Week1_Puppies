@@ -30,7 +30,7 @@ fun <T> ChipGroup(
     selectedItems: List<T>,
     itemFormatter: (T) -> String,
     itemIconFormatter: (T) -> Int? = { null },
-    onBreedSelectionChanged: (List<T>) -> Unit
+    onSelectionChanged: (List<T>) -> Unit
 ) {
     LazyRow(modifier = modifier) {
         itemsIndexed(items) { index, item ->
@@ -40,9 +40,9 @@ fun <T> ChipGroup(
                 selected = selectedItems.contains(item),
             ) { selected ->
                 if (selected) {
-                    onBreedSelectionChanged(selectedItems + item)
+                    onSelectionChanged(selectedItems + item)
                 } else {
-                    onBreedSelectionChanged(selectedItems - item)
+                    onSelectionChanged(selectedItems - item)
                 }
             }
 

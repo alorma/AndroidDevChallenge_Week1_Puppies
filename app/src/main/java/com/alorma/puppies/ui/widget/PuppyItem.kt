@@ -65,7 +65,7 @@ fun PuppyItem(
 }
 
 @Composable
-private fun PuppyItemCard(
+fun PuppyItemCard(
     avatarHeight: Dp,
     avatarWidth: Dp,
     puppy: PuppyItemModel,
