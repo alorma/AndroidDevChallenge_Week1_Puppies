@@ -17,26 +17,32 @@ package com.alorma.puppies.ui.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Button
-import androidx.compose.material.Card
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
@@ -44,19 +50,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.alorma.puppies.data.PuppyProvider
+import com.alorma.puppies.ui.base.modifier.onSurfaceClick
 import com.alorma.puppies.ui.base.modifier.primaryClick
 import com.alorma.puppies.ui.base.widget.ChipGroup
 import com.alorma.puppies.ui.model.PuppyId
 import com.alorma.puppies.ui.model.PuppyItemModel
-import dev.chrisbanes.accompanist.coil.CoilImage
+import com.alorma.puppies.ui.widget.PuppyAvatar
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
-import java.util.Locale
 
 @Composable
 fun PuppyDetailScreen(
@@ -64,26 +67,19 @@ fun PuppyDetailScreen(
     puppyId: PuppyId
 ) {
     val puppy = PuppyProvider.getPuppy(puppyId)
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        Box {
+
+    Surface {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.background),
+        ) {
             PuppyHeader(
-                modifier = Modifier
-                    .align(alignment = Alignment.TopCenter)
-                    .requiredHeight(280.dp)
-                    .clipToBounds(),
+                modifier = Modifier.requiredHeight(280.dp),
                 puppy = puppy,
                 navController = navController
             )
-            Column(
-                modifier = Modifier.padding(
-                    top = 220.dp
-                ),
-            ) {
-                PuppyDetailCard(puppy)
-                PuppyContent()
-            }
+            PuppyContent()
         }
     }
 }
@@ -97,14 +93,14 @@ fun PuppyHeader(
     Surface(modifier = modifier.fillMaxWidth()) {
         if (puppy.image != null) {
             key(puppy.image) {
-                CoilImage(
-                    data = puppy.image,
-                    contentScale = ContentScale.FillWidth,
+                PuppyAvatar(
                     modifier = Modifier.fillMaxSize(),
-                    contentDescription = "Puppy im age"
+                    puppy = puppy,
                 )
             }
-            Box(modifier = Modifier.statusBarsPadding()) {
+            Box(
+                modifier = Modifier.statusBarsPadding()
+            ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "back",
@@ -124,86 +120,89 @@ fun PuppyHeader(
 }
 
 @Composable
-fun PuppyDetailCard(puppy: PuppyItemModel) {
-    Card(
-        modifier = Modifier
-            .padding(
-                horizontal = 16.dp
-            )
-            .requiredHeight(100.dp)
-            .fillMaxWidth(),
-        elevation = 8.dp,
+fun PuppyContent() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
     ) {
-        Box(
-            modifier = Modifier.padding(
-                horizontal = 16.dp,
-                vertical = 8.dp,
-            )
-        ) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = puppy.name,
-                    fontWeight = FontWeight.Bold,
+        Column {
+            Column(
+                modifier = Modifier.padding(16.dp),
+            ) {
+                ChipGroup(
+                    items = listOf(
+                        "Active",
+                        "Friendly",
+                        "Loyal"
+                    ),
+                    selectedItems = remember { mutableStateListOf() },
+                    itemFormatter = { it },
+                    onSelectionChanged = { }
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+
                 Text(
-                    text = puppy.breed.name,
-                    style = MaterialTheme.typography.caption,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.40f)
+                    text = LIPSUM,
+                    style = MaterialTheme.typography.body2
                 )
             }
 
-            Row(
-                modifier = Modifier.align(Alignment.BottomStart),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "${puppy.age} years",
-                    style = MaterialTheme.typography.caption,
+            LazyColumn {
+                val infos = listOf(
+                    "Puppy information",
+                    "Agency contact"
                 )
-                Text(
-                    text = " · ",
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    text = puppy.gender.name.capitalize(Locale.getDefault()),
-                    style = MaterialTheme.typography.caption,
-                )
+                itemsIndexed(infos) { index, item ->
+                    if (index == 0) {
+                        Divider(modifier = Modifier.fillMaxWidth())
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .requiredHeight(56.dp)
+                            .onSurfaceClick { }
+                            .padding(horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.ArrowDropDown,
+                            contentDescription = null
+                        )
+                        Text(text = item)
+                    }
+                    if (index <= infos.size) {
+                        Divider(modifier = Modifier.fillMaxWidth())
+                    }
+
+                }
             }
         }
+
+        PuppyDetailButtons()
     }
 }
 
 @Composable
-fun PuppyContent() {
-    Box(
+private fun BoxScope.PuppyDetailButtons() {
+    val favState = remember { mutableStateOf(false) }
+    Surface(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
+            .fillMaxWidth()
+            .align(Alignment.BottomEnd),
+        color = MaterialTheme.colors.primary,
+        shape = MaterialTheme.shapes.medium.copy(
+            bottomStart = CornerSize(0.dp),
+            bottomEnd = CornerSize(0.dp),
+        )
     ) {
-        Column {
-            ChipGroup(
-                items = listOf(
-                    "Active",
-                    "Friendly",
-                    "Loyal"
-                ),
-                selectedItems = remember { mutableStateListOf() },
-                itemFormatter = { it },
-                onSelectionChanged = { }
-            )
-
-            Text(text = LIPSUM, style = MaterialTheme.typography.body2)
-        }
-
-        val favState = remember { mutableStateOf(false) }
         Row(
-            modifier = Modifier.align(Alignment.BottomEnd),
+            modifier = Modifier.padding(
+                horizontal = 16.dp,
+                vertical = 8.dp,
+            ),
         ) {
-            IconButton(
+            OutlinedButton(
                 modifier = Modifier.size(48.dp),
                 onClick = { favState.value = !favState.value },
+                elevation = ButtonDefaults.elevation()
             ) {
                 Icon(
                     imageVector = if (favState.value) {
@@ -219,10 +218,14 @@ fun PuppyContent() {
                     },
                 )
             }
+            Spacer(modifier = Modifier.requiredWidth(8.dp))
             Button(
                 modifier = Modifier
                     .requiredHeight(48.dp)
                     .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.surface
+                ),
                 onClick = { }
             ) {
                 Text("Adopt Now")
