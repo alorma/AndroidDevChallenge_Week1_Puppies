@@ -61,8 +61,6 @@ fun PuppyDetailScreen(
             val shape = MaterialTheme.shapes.medium.copy(
                 topStart = CornerSize(0.dp),
                 topEnd = CornerSize(0.dp),
-                bottomStart = CornerSize(12.dp),
-                bottomEnd = CornerSize(12.dp),
             )
             PuppyHeader(
                 modifier = Modifier

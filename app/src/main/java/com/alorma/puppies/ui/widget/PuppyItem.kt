@@ -27,7 +27,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -68,7 +68,7 @@ private fun PuppyItemCard(
     puppy: PuppyItemModel,
     onClick: () -> Unit,
 ) {
-    val verticalDistanceFromAvatar = 16.dp
+    val verticalDistanceFromAvatar = 24.dp
     Card(
         modifier = Modifier
             .padding(
@@ -79,7 +79,9 @@ private fun PuppyItemCard(
             )
             .height(avatarHeight - verticalDistanceFromAvatar * 2)
             .fillMaxWidth()
-            .primaryClick { onClick() },
+            .primaryClick { onClick() }
+            .clip(MaterialTheme.shapes.medium)
+            .clipToBounds(),
         shape = MaterialTheme.shapes.medium,
         elevation = 4.dp,
     ) {

@@ -84,7 +84,10 @@ fun PuppiesListScreen(
                     modifier = Modifier.statusBarsPadding(),
                     title = { Text(text = "Puppies list") },
                     backgroundColor = MaterialTheme.colors.primary,
-                    actions = { FilterButton {} }
+                    actions = {
+                        FilterButton {
+                        }
+                    }
                 )
             }
         }
@@ -99,17 +102,6 @@ fun PuppiesListScreen(
             navController = navController
         )
     }
-
-    /*
-                PuppiesFilters(
-                breeds = PuppyProvider.getAllBreeds(),
-                genders = PuppyProvider.getAllGenders(),
-                ages = minMaxAges,
-                selectedBreedFilters = selectedBreedFilters,
-                selectedGenderFilters = selectedGenderFilters,
-                selectedAgesFilters = selectedAgesFilters,
-            )
-     */
 }
 
 @Composable
