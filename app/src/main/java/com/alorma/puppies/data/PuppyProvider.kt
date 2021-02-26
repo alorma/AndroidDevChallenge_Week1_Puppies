@@ -49,6 +49,7 @@ object PuppyProvider {
             gender = GenderType.FEMALE,
             breed = breedsList[1],
             age = 9,
+            icon = R.drawable.ic_dog,
         ),
         PuppyItemModel(
             id = PuppyId(2),
@@ -57,6 +58,7 @@ object PuppyProvider {
             gender = GenderType.MALE,
             breed = breedsList[0],
             age = 2,
+            icon = R.drawable.ic_dog,
         ),
     )
 

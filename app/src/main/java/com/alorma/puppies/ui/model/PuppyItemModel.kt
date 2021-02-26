@@ -21,7 +21,8 @@ data class PuppyItemModel(
     val image: String? = null,
     val gender: GenderType,
     val breed: BreedItemModel,
-    val age: Int
+    val age: Int,
+    val icon: Int
 )
 
 data class BreedItemModel(

@@ -46,13 +46,10 @@ fun PuppyAvatar(
     puppy: PuppyItemModel,
 ) {
     key(puppy.image) {
-        val color = MaterialTheme.colors.onSurface.copy(alpha = 0.20f)
-        val compositeColor = color.compositeOver(MaterialTheme.colors.surface)
-
         Card(
             modifier = modifier,
-            elevation = 8.dp,
-            backgroundColor = compositeColor,
+            backgroundColor = MaterialTheme.colors.background,
+            elevation = 12.dp,
         ) {
             if (puppy.image == null) {
                 PuppyEmptyIcon(contentDescription = "${puppy.name} picture empty")

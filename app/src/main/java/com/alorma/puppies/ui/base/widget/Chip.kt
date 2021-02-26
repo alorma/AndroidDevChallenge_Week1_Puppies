@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.alorma.drawer_base.compositeOverSurface
 import com.alorma.puppies.R
 import com.alorma.puppies.ui.theme.PuppiesTheme
 
@@ -49,7 +50,7 @@ fun Chip(
                 selected = selected,
                 role = Role.Checkbox,
                 onClick = { onSelectedChanged(!selected) }
-            )
+            ),
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),

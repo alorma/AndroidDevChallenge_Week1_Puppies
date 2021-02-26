@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -79,13 +78,13 @@ fun PuppiesListScreen(
         Column(
             modifier = Modifier.padding(horizontal = 8.dp)
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             PuppiesListPremiumBanner()
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             PuppiesListSearchBar()
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
             PuppiesListFilters()
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
             PuppiesList(navController = navController)
         }
     }
@@ -102,16 +101,21 @@ fun PuppiesListTopBar() {
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
+                modifier = Modifier.padding(start = 4.dp),
                 text = "Location",
                 color = MaterialTheme.colors.onBackground.copy(alpha = 0.50f),
                 style = MaterialTheme.typography.caption
             )
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(
+                    modifier = Modifier.size(20.dp),
                     imageVector = Icons.Default.LocationOn,
                     contentDescription = null,
                     tint = MaterialTheme.colors.onBackground,
                 )
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "Barcelona",
                     color = MaterialTheme.colors.onBackground,
@@ -143,7 +147,8 @@ fun PuppiesListPremiumBanner() {
             modifier = Modifier
                 .padding(top = 32.dp)
                 .fillMaxWidth()
-                .padding(vertical = 8.dp)
+                .padding(vertical = 8.dp),
+            elevation = 8.dp,
         ) {
             Column(
                 modifier = Modifier.padding(
@@ -257,7 +262,7 @@ fun PuppiesList(navController: NavController) {
                     }
                 )
                 if (index < puppiesList.size) {
-                    Spacer(modifier = Modifier.requiredHeight(8.dp))
+                    Spacer(modifier = Modifier.requiredHeight(16.dp))
                 }
             }
         }

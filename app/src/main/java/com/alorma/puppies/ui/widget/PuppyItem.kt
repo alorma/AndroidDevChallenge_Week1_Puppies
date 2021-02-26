@@ -17,17 +17,24 @@ package com.alorma.puppies.ui.widget
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -36,6 +43,7 @@ import com.alorma.puppies.data.PuppyProvider
 import com.alorma.puppies.ui.base.modifier.primaryClick
 import com.alorma.puppies.ui.model.PuppyItemModel
 import com.alorma.puppies.ui.theme.PuppiesTheme
+import java.util.Locale
 
 @Composable
 fun PuppyItem(
@@ -77,37 +85,65 @@ private fun PuppyItemCard(
             .clip(MaterialTheme.shapes.medium)
             .clipToBounds(),
         shape = MaterialTheme.shapes.medium,
-        elevation = 4.dp,
+        elevation = 8.dp,
     ) {
-        Column(
-            modifier = Modifier.padding(
-                top = 2.dp,
-                start = avatarWidth / 2 + 8.dp,
-                end = 8.dp,
-                bottom = 8.dp
+        Box {
+            Icon(
+                painter = painterResource(id = puppy.icon),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .size(24.dp)
+                    .padding(
+                        top = 8.dp,
+                        end = 12.dp
+                    ),
+                tint = MaterialTheme.colors.onBackground.copy(alpha = 0.40f)
             )
-        ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = puppy.name,
-                fontWeight = FontWeight.Bold,
-            )
-            PuppyItemCardRowInfo("Breed: ${puppy.breed.name}")
-            PuppyItemCardRowInfo("Age: ${puppy.age}")
+            Box(
+                modifier = Modifier.padding(
+                    top = 8.dp,
+                    start = avatarWidth / 2 + 8.dp,
+                    end = 8.dp,
+                    bottom = 8.dp
+                )
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = puppy.name,
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = puppy.breed.name,
+                        style = MaterialTheme.typography.caption,
+                        color = MaterialTheme.colors.onSurface.copy(alpha = 0.40f)
+                    )
+                }
+
+                Row(
+                    modifier = Modifier.align(Alignment.BottomStart),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "${puppy.age} years",
+                        style = MaterialTheme.typography.caption,
+                    )
+                    Text(
+                        text = " · ",
+                        fontWeight = FontWeight.Bold,
+                    )
+                    Text(
+                        text = puppy.gender.name.capitalize(Locale.getDefault()),
+                        style = MaterialTheme.typography.caption,
+                    )
+                }
+            }
         }
     }
-}
-
-@Composable
-fun PuppyItemCardRowInfo(text: String) {
-    Text(
-        modifier = Modifier
-            .padding(start = 4.dp)
-            .fillMaxWidth(),
-        text = text,
-        fontWeight = FontWeight.Light,
-        style = MaterialTheme.typography.body2,
-    )
 }
 
 @Preview(showBackground = true)
