@@ -171,7 +171,6 @@ fun PuppyContent() {
                     if (index <= infos.size) {
                         Divider(modifier = Modifier.fillMaxWidth())
                     }
-
                 }
             }
         }
