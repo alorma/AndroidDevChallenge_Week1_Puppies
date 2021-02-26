@@ -15,6 +15,9 @@
  */
 package com.alorma.puppies.data
 
+import com.alorma.puppies.R
+import com.alorma.puppies.ui.model.AnimalType
+import com.alorma.puppies.ui.model.AnimalTypeId
 import com.alorma.puppies.ui.model.BreedId
 import com.alorma.puppies.ui.model.BreedItemModel
 import com.alorma.puppies.ui.model.GenderType
@@ -57,25 +60,34 @@ object PuppyProvider {
         ),
     )
 
-    fun getAllPuppies(
-        breeds: List<BreedId>,
-        genders: List<GenderType>,
-        ages: Pair<Int, Int>,
-    ): List<PuppyItemModel> {
-        return puppiesList.filter { puppy ->
-            val isBreed = if (breeds.isEmpty()) true else puppy.breed.id in breeds
-            val isGender = if (genders.isEmpty()) true else puppy.gender in genders
-            val isAge = puppy.age >= ages.first && puppy.age <= ages.second
+    private val animalTypes = listOf(
+        AnimalType(
+            id = AnimalTypeId("all"),
+            name = "All",
+            icon = R.drawable.ic_pawn
+        ),
+        AnimalType(
+            id = AnimalTypeId("dog"),
+            name = "Dog",
+            icon = R.drawable.ic_dog
+        ),
+        AnimalType(
+            id = AnimalTypeId("cat"),
+            name = "Cat",
+            icon = R.drawable.ic_cat
+        ),
+        AnimalType(
+            id = AnimalTypeId("bird"),
+            name = "Bird",
+            icon = R.drawable.ic_bird
+        ),
+    )
 
-            isBreed && isGender && isAge
-        }
-    }
+    fun getAllPuppies(): List<PuppyItemModel> = puppiesList
 
     fun randomPuppy(): PuppyItemModel = puppiesList.random()
 
-    fun getAllBreeds(): List<BreedItemModel> = breedsList
-
-    fun getAllGenders(): List<GenderType> = GenderType.values().toList()
+    fun getAllAnimalTypes(): List<AnimalType> = animalTypes
 
     fun getPuppy(puppyId: PuppyId): PuppyItemModel =
         puppiesList.first { it.id.value == puppyId.value }

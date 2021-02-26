@@ -15,215 +15,251 @@
  */
 package com.alorma.puppies.ui.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.compose.navigate
-import androidx.navigation.compose.rememberNavController
 import com.alorma.puppies.Navigation
+import com.alorma.puppies.R
 import com.alorma.puppies.data.PuppyProvider
+import com.alorma.puppies.data.UserProvider
+import com.alorma.puppies.ui.base.modifier.onSurfaceClick
 import com.alorma.puppies.ui.base.widget.ChipGroup
-import com.alorma.puppies.ui.model.BreedItemModel
-import com.alorma.puppies.ui.model.GenderType
-import com.alorma.puppies.ui.model.PuppyItemModel
+import com.alorma.puppies.ui.model.AnimalType
 import com.alorma.puppies.ui.widget.PuppyItem
-import com.google.android.material.slider.LabelFormatter
-import com.google.android.material.slider.RangeSlider
+import com.alorma.puppies.ui.widget.UserAvatar
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
-import java.util.*
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PuppiesListScreen(
     navController: NavController
 ) {
-    val selectedBreedFilters: MutableState<List<BreedItemModel>> =
-        remember { mutableStateOf(listOf()) }
+    Column(
+        modifier = Modifier
+            .background(color = MaterialTheme.colors.background)
+            .statusBarsPadding()
+    ) {
+        PuppiesListTopBar()
+        Column(
+            modifier = Modifier.padding(horizontal = 8.dp)
+        ) {
+            Spacer(modifier = Modifier.height(8.dp))
+            PuppiesListPremiumBanner()
+            Spacer(modifier = Modifier.height(8.dp))
+            PuppiesListSearchBar()
+            Spacer(modifier = Modifier.height(8.dp))
+            PuppiesListFilters()
+            Spacer(modifier = Modifier.height(8.dp))
+            PuppiesList(navController = navController)
+        }
+    }
+}
 
-    val selectedGenderFilters: MutableState<List<GenderType>> =
-        remember { mutableStateOf(listOf()) }
-
-    val minMaxAges = 0 to 14
-    val selectedAgesFilters: MutableState<Pair<Int, Int>> =
-        remember { mutableStateOf(minMaxAges) }
-
-    Scaffold(
-        topBar = {
-            Box(
-                modifier = Modifier.background(color = MaterialTheme.colors.primary)
-            ) {
-                TopAppBar(
-                    modifier = Modifier.statusBarsPadding(),
-                    title = { Text(text = "Puppies list") },
-                    backgroundColor = MaterialTheme.colors.primary,
-                    actions = {
-                        FilterButton {
-                        }
-                    }
+@Composable
+fun PuppiesListTopBar() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Location",
+                color = MaterialTheme.colors.onBackground.copy(alpha = 0.50f),
+                style = MaterialTheme.typography.caption
+            )
+            Row {
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.onBackground,
+                )
+                Text(
+                    text = "Barcelona",
+                    color = MaterialTheme.colors.onBackground,
+                    style = MaterialTheme.typography.subtitle1,
                 )
             }
         }
-    ) {
-        val puppiesList = PuppyProvider.getAllPuppies(
-            breeds = selectedBreedFilters.value.map { breed -> breed.id },
-            genders = selectedGenderFilters.value,
-            ages = selectedAgesFilters.value,
-        )
-        PuppiesList(
-            puppies = puppiesList,
-            navController = navController,
-            selectedBreedFilters = selectedBreedFilters,
-        )
-    }
-}
-
-@Composable
-private fun FilterButton(
-    onClick: () -> Unit,
-) {
-    IconButton(onClick = onClick) {
-        Icon(
-            imageVector = Icons.Default.FilterList,
-            contentDescription = "Filter"
-        )
-    }
-}
-
-@Composable
-private fun PuppiesFilters(
-    breeds: List<BreedItemModel>,
-    genders: List<GenderType>,
-    ages: Pair<Int, Int>,
-    selectedBreedFilters: MutableState<List<BreedItemModel>>,
-    selectedGenderFilters: MutableState<List<GenderType>>,
-    selectedAgesFilters: MutableState<Pair<Int, Int>>
-) {
-    Column(
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
-        Text(text = "Breed", style = MaterialTheme.typography.subtitle1)
-        ChipGroup(
-            items = breeds,
-            selectedItems = selectedBreedFilters.value,
-            itemFormatter = { breed -> breed.name }
-        ) { selectedBreeds -> selectedBreedFilters.value = selectedBreeds }
-
-        Text(text = "Gender", style = MaterialTheme.typography.subtitle1)
-        ChipGroup(
-            items = genders,
-            selectedItems = selectedGenderFilters.value,
-            itemFormatter = { gender -> gender.name.capitalize(Locale.getDefault()) }
-        ) { selectedGender -> selectedGenderFilters.value = selectedGender }
-
-        Text(
-            text = "Age: (${selectedAgesFilters.value.first} to ${selectedAgesFilters.value.second})",
-            style = MaterialTheme.typography.subtitle1
-        )
-        Ranger(ages) { (min, max) ->
-            selectedAgesFilters.value = min to max
-        }
-    }
-}
-
-@Composable
-private fun Ranger(
-    range: Pair<Int, Int>,
-    onRangeChanged: (Pair<Int, Int>) -> Unit,
-) {
-    AndroidView(
-        factory = { context ->
-            val rangeSlider = RangeSlider(context)
-
-            rangeSlider.values = listOf(range.first, range.second).map { it.toFloat() }
-            rangeSlider.stepSize = 1f
-            rangeSlider.valueFrom = range.first.toFloat()
-            rangeSlider.valueTo = range.second.toFloat()
-
-            rangeSlider.labelBehavior = LabelFormatter.LABEL_WITHIN_BOUNDS
-            rangeSlider.setLabelFormatter { years ->
-                "${years.toInt()} years"
-            }
-
-            rangeSlider.addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
-                override fun onStartTrackingTouch(slider: RangeSlider) {}
-
-                override fun onStopTrackingTouch(slider: RangeSlider) {}
-            })
-
-            rangeSlider.addOnChangeListener { slider, _, fromUser ->
-                if (fromUser) {
-                    onRangeChanged(slider.values[0].toInt() to slider.values[1].toInt())
-                }
-            }
-            rangeSlider
-        }
-    )
-}
-
-@Composable
-private fun PuppiesList(
-    puppies: List<PuppyItemModel>,
-    navController: NavController,
-    selectedBreedFilters: MutableState<List<BreedItemModel>>,
-) {
-    Column {
-        ChipGroup(
-            items = PuppyProvider.getAllBreeds(),
-            selectedItems = selectedBreedFilters.value,
-            itemFormatter = { it.name },
-            onBreedSelectionChanged = { selectedBreeds ->
-                selectedBreedFilters.value = selectedBreeds
-            })
-
-        LazyColumn(
+        UserAvatar(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 8.dp)
+                .size(32.dp)
+                .align(Alignment.TopEnd)
+                .clip(CircleShape)
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colors.secondary,
+                    shape = CircleShape
+                )
+                .onSurfaceClick { },
+            user = UserProvider.user,
+        )
+
+    }
+}
+
+@Composable
+fun PuppiesListPremiumBanner() {
+    Box {
+        Card(
+            modifier = Modifier
+                .padding(top = 32.dp)
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
         ) {
-            itemsIndexed(puppies) { index, puppy ->
-                key(puppy.id.value) {
-                    PuppyItem(
-                        puppy = puppy,
-                        onClick = {
-                            navController.navigate(Navigation.buildPuppyDetailPath(puppyId = puppy.id))
-                        }
+            Column(
+                modifier = Modifier.padding(
+                    top = 12.dp,
+                    bottom = 12.dp,
+                    start = 12.dp,
+                    end = 116.dp,
+                ),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                Text(
+                    text = "Become premium with us",
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.secondary,
+                    style = MaterialTheme.typography.subtitle1,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Access more popular adopter and pets by upgrading to premium",
+                    style = MaterialTheme.typography.body2,
+                    color = MaterialTheme.colors.onBackground.copy(alpha = 0.50f),
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                Button(
+                    onClick = { },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = MaterialTheme.colors.secondary
                     )
-                    if (index < puppies.size) {
-                        Spacer(modifier = Modifier.requiredHeight(8.dp))
-                    }
+                ) {
+                    Text(text = "Become Premium")
                 }
+            }
+        }
+        Image(
+            modifier = Modifier
+                .height(100.dp)
+                .width(90.dp)
+                .align(Alignment.TopEnd),
+            painter = painterResource(id = R.drawable.premium_dog),
+            contentDescription = null
+        )
+    }
+}
+
+@Composable
+fun PuppiesListSearchBar() {
+    Box {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp),
+            elevation = 8.dp,
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.onSurface.copy(alpha = 0.50f),
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Search pet to adopt",
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.40f),
+                    style = MaterialTheme.typography.subtitle1,
+                )
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun lightPreviewPuppiesListScreen() {
-    PuppiesListScreen(navController = rememberNavController())
+fun PuppiesListFilters() {
+    val selectedBreedFilters: MutableState<List<AnimalType>> =
+        remember {
+            mutableStateOf(
+                listOf(
+                    PuppyProvider.getAllAnimalTypes().first()
+                )
+            )
+        }
+
+    ChipGroup(
+        items = PuppyProvider.getAllAnimalTypes(),
+        selectedItems = selectedBreedFilters.value,
+        itemFormatter = { it.name },
+        itemIconFormatter = { it.icon },
+        onBreedSelectionChanged = { selectedBreeds ->
+            selectedBreedFilters.value = selectedBreeds
+        })
+}
+
+@Composable
+fun PuppiesList(navController: NavController) {
+    val puppiesList = PuppyProvider.getAllPuppies()
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 8.dp)
+    ) {
+        itemsIndexed(puppiesList) { index, puppy ->
+            key(puppy.id.value) {
+                PuppyItem(
+                    puppy = puppy,
+                    onClick = {
+                        navController.navigate(Navigation.buildPuppyDetailPath(puppyId = puppy.id))
+                    }
+                )
+                if (index < puppiesList.size) {
+                    Spacer(modifier = Modifier.requiredHeight(8.dp))
+                }
+            }
+        }
+    }
 }

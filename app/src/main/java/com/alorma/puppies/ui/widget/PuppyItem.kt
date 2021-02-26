@@ -44,13 +44,7 @@ fun PuppyItem(
 ) {
     val avatarHeight = 140.dp
     val avatarWidth = 140.dp
-    Box(
-        modifier = Modifier.padding(
-            start = 8.dp,
-            top = 2.dp,
-            end = 8.dp
-        )
-    ) {
+    Box {
         PuppyItemCard(avatarHeight, avatarWidth, puppy, onClick = onClick)
         PuppyAvatar(
             modifier = Modifier
@@ -75,7 +69,6 @@ private fun PuppyItemCard(
             .padding(
                 top = verticalDistanceFromAvatar,
                 start = avatarWidth / 2,
-                end = 8.dp,
                 bottom = verticalDistanceFromAvatar,
             )
             .height(avatarHeight - verticalDistanceFromAvatar * 2)

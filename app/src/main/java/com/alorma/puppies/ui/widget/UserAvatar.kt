@@ -26,7 +26,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Pets
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.key
@@ -36,16 +36,16 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alorma.puppies.ui.model.PuppyItemModel
+import com.alorma.puppies.ui.model.UserModel
 import com.alorma.puppies.ui.theme.PuppiesTheme
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable
-fun PuppyAvatar(
+fun UserAvatar(
     modifier: Modifier = Modifier,
-    puppy: PuppyItemModel,
+    user: UserModel,
 ) {
-    key(puppy.image) {
+    key(user.avatar) {
         val color = MaterialTheme.colors.onSurface.copy(alpha = 0.20f)
         val compositeColor = color.compositeOver(MaterialTheme.colors.surface)
 
@@ -54,37 +54,33 @@ fun PuppyAvatar(
             elevation = 8.dp,
             backgroundColor = compositeColor,
         ) {
-            if (puppy.image == null) {
-                PuppyEmptyIcon(contentDescription = "${puppy.name} picture empty")
-            } else {
-                CoilImage(
-                    data = puppy.image,
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop,
-                    loading = {
-                        PuppyLoadingIcon(contentDescription = "${puppy.name} picture loading")
-                    },
-                    error = { error ->
-                        Log.w("PuppyAvatar", error.throwable)
-                        PuppyErrorIcon(contentDescription = "${puppy.name} picture error")
-                    }
-                )
-            }
+            CoilImage(
+                data = user.avatar,
+                contentDescription = "",
+                contentScale = ContentScale.Crop,
+                loading = {
+                    UserLoadingIcon(contentDescription = "${user.name} picture loading")
+                },
+                error = { error ->
+                    Log.w("UserAvatar", error.throwable)
+                    UserErrorIcon(contentDescription = "${user.name} picture error")
+                }
+            )
         }
     }
 }
 
 @Composable
-fun PuppyEmptyIcon(contentDescription: String) {
+fun UserEmptyIcon(contentDescription: String) {
     Box(modifier = Modifier.fillMaxSize()) {
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.secondary) {
-            PuppyPlaceholderIcon(contentDescription = contentDescription)
+            UserPlaceholderIcon(contentDescription = contentDescription)
         }
     }
 }
 
 @Composable
-fun PuppyLoadingIcon(contentDescription: String) {
+fun UserLoadingIcon(contentDescription: String) {
     Box(modifier = Modifier.fillMaxSize()) {
         CircularProgressIndicator(
             modifier = Modifier
@@ -94,47 +90,47 @@ fun PuppyLoadingIcon(contentDescription: String) {
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colors.primary.copy(alpha = 0.5f)
         ) {
-            PuppyPlaceholderIcon(contentDescription = contentDescription)
+            UserPlaceholderIcon(contentDescription = contentDescription)
         }
     }
 }
 
 @Composable
-fun PuppyErrorIcon(contentDescription: String) {
+fun UserErrorIcon(contentDescription: String) {
     Box(modifier = Modifier.fillMaxSize()) {
         CompositionLocalProvider(LocalContentColor provides MaterialTheme.colors.error) {
-            PuppyPlaceholderIcon(contentDescription = contentDescription)
+            UserPlaceholderIcon(contentDescription = contentDescription)
         }
     }
 }
 
 @Composable
-fun BoxScope.PuppyPlaceholderIcon(contentDescription: String) {
+fun BoxScope.UserPlaceholderIcon(contentDescription: String) {
     Icon(
         modifier = Modifier
             .size(40.dp)
             .align(Alignment.Center),
-        imageVector = Icons.Default.Pets,
+        imageVector = Icons.Default.AccountCircle,
         contentDescription = contentDescription,
     )
 }
 
 @Preview(showBackground = true, name = "Empty")
 @Composable
-fun EmptyPreviewPuppyImage() {
+fun EmptyPreviewUserImage() {
     PuppiesTheme {
         Box(modifier = Modifier.size(80.dp)) {
-            PuppyEmptyIcon(contentDescription = "")
+            UserEmptyIcon(contentDescription = "")
         }
     }
 }
 
 @Preview(showBackground = true, name = "Loading")
 @Composable
-fun LoadingPreviewPuppyImage() {
+fun LoadingPreviewUserImage() {
     PuppiesTheme {
         Box(modifier = Modifier.size(80.dp)) {
-            PuppyLoadingIcon(contentDescription = "")
+            UserLoadingIcon(contentDescription = "")
         }
     }
 }
@@ -144,10 +140,10 @@ fun LoadingPreviewPuppyImage() {
     name = "Error",
 )
 @Composable
-fun ErrorPreviewPuppyImage() {
+fun ErrorPreviewUserImage() {
     PuppiesTheme {
         Box(modifier = Modifier.size(80.dp)) {
-            PuppyErrorIcon(contentDescription = "")
+            UserErrorIcon(contentDescription = "")
         }
     }
 }

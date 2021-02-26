@@ -28,7 +28,7 @@ val LightColorPalette = lightColors(
     primary = canary,
     primaryVariant = canary_d_1,
     onPrimary = black,
-    secondary = bamboo,
+    secondary = soda,
     onSecondary = white,
     background = gray_l_4,
     surface = white,
@@ -39,7 +39,7 @@ val DarkColorPalette = darkColors(
     primary = canary_l_3,
     primaryVariant = canary,
     onPrimary = black,
-    secondary = bamboo_l_3,
+    secondary = soda_l_3,
     onSecondary = black,
     background = gray_v,
     surface = black,
@@ -49,10 +49,9 @@ val DarkColorPalette = darkColors(
 @Composable
 fun PuppiesTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    darkThemeState: MutableState<Boolean> = remember { mutableStateOf(darkTheme) },
     content: @Composable (MutableState<Boolean>) -> Unit
 ) {
-    val darkThemeState = remember { mutableStateOf(darkTheme) }
-
     val colors = if (darkThemeState.value) {
         DarkColorPalette
     } else {
