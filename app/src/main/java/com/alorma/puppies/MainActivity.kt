@@ -36,8 +36,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.alorma.drawer_base.DebugDrawerLayout
-import com.alorma.drawer_base.DebugDrawerValue
-import com.alorma.drawer_base.rememberDebugDrawerState
 import com.alorma.drawer_modules.BuildModule
 import com.alorma.drawer_modules.DeviceModule
 import com.alorma.puppies.base.DarkThemeModule
@@ -68,7 +66,6 @@ fun mainContent(darkModeState: MutableState<Boolean>) {
     DebugDrawerLayout(
         isDebug = { true },
         drawerColors = DarkColorPalette,
-        debugDrawerState = rememberDebugDrawerState(DebugDrawerValue.Closed),
         drawerModules = {
             Column(modifier = Modifier.statusBarsPadding()) {
                 val modulesModifier = Modifier
